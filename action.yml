@@ -1,0 +1,43 @@
+name: 'Push Anydir to Anydir'
+description: 'Github action to push any subdirectory from a repo as a subdirectory in another repo.'
+author: 'Fabian Bao <baoyaolong@gmail.com>'
+inputs:
+  source-folder:
+    description: 'Original folder name'
+    required: false
+  source-excludes:
+    description: '[Optional] exclude files which already in the destination repo, like configurations file.'
+    default: ''
+    required: false
+  dest-repo:
+    description: 'Destination repository'
+    required: true
+  dest-branch:
+    description: '[Optional] Destination branch name default main'
+    required: false
+    default: 'main'
+  dest-folder:
+    description: 'Destination folder name'
+    required: true
+  commit-message:
+    description: '[Optional] commit message for the output repository. ORIGIN_COMMIT is replaced by the URL@commit in the origin repo'
+    default: 'Update from ORIGIN_COMMIT'
+    required: false
+  dest-excludes:
+    description: '[Optional] exclude files which already in the destination repo, like configurations file.'
+    default: ''
+    required: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.source-folder }}
+    - ${{ inputs.source-excludes }}
+    - ${{ inputs.dest-repo }}
+    - ${{ inputs.dest-branch }}
+    - ${{ inputs.dest-folder }} 
+    - ${{ inputs.commit-message }}
+    - ${{ inputs.excludes }}
+branding:
+  icon: 'git-pull-request'
+  color: 'blue'
