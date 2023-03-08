@@ -3,11 +3,12 @@
 set -e  # if a command fails it stops the execution
 set -u  # script fails if trying to access to an undefined variable
 
-DEST_REPO="$1"
-DEST_BRANCH="$2"
-DEST_FOLDER="$3"
-COMMIT_MESSAGE="$4"
-EXCLUDES="$5"
+SOURCE_FOLDER="$1"
+DEST_REPO="$2"
+DEST_BRANCH="$3"
+DEST_FOLDER="$4"
+COMMIT_MESSAGE="$5"
+EXCLUDES="$6"
 
 REPO_DIR=$(mktemp -d)
 CLONE_DIR="$REPO_DIR/$DEST_FOLDER"
@@ -15,8 +16,8 @@ TMP_DIR=$(mktemp -d)
 
 echo "Cloning destination git repository"
 # Setup git
-git config --global user.email "noahdragon-actions-push-repo-as-subdirectories@example.org"
-git config --global user.name "actions-push-repo-as-subdirectories"
+git config --global user.email "fabian4-actions-push-anydir-to-anydir@example.org"
+git config --global user.name "actions-push-anydir-to-anydir"
 git clone --single-branch --branch "$DEST_BRANCH" "https://$API_TOKEN_GITHUB@github.com/$DEST_REPO.git" "$REPO_DIR"
 
 echo "Check if destinate folder exists, if not create new one"
@@ -38,7 +39,12 @@ find "$CLONE_DIR" | grep -v "^$CLONE_DIR/\.git" | grep -v "^$CLONE_DIR$" | xargs
 ls -la "$CLONE_DIR"
 
 echo "Copying contents to git repo"
-cp -r "$GITHUB_WORKSPACE"/* "$CLONE_DIR"
+IFS=';'; read -a source_strarr <<< "$SOURCE_FOLDER"
+for val in "${source_strarr[@]}";
+do
+  echo "$val"
+  cp -r "$GITHUB_WORKSPACE"/"$val" "$CLONE_DIR"
+done
 ls -la "$CLONE_DIR"
 
 echo "Copying back the excluded files/folders, may overwrite the existing ones."

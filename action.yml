@@ -4,9 +4,6 @@ author: 'Fabian Bao <baoyaolong@gmail.com>'
 inputs:
   source-folder:
     description: 'Original folder name'
-    required: false
-  source-excludes:
-    description: '[Optional] exclude files which already in the destination repo, like configurations file.'
     default: ''
     required: false
   dest-repo:
@@ -32,12 +29,11 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.source-folder }}
-    - ${{ inputs.source-excludes }}
     - ${{ inputs.dest-repo }}
     - ${{ inputs.dest-branch }}
     - ${{ inputs.dest-folder }} 
     - ${{ inputs.commit-message }}
-    - ${{ inputs.excludes }}
+    - ${{ inputs.dest-excludes }}
 branding:
   icon: 'git-pull-request'
   color: 'blue'
