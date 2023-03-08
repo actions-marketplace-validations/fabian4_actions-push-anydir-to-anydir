@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM alpine:latest
 
 LABEL repository="https://github.com/fabian4/actions-push-anydir-to-anydir"
 LABEL homepage="https://github.com/fabian4/actions-push-anydir-to-anydir"
